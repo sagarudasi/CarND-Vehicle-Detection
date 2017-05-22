@@ -1,14 +1,36 @@
 from common import *
 import pickle
 
-images = glob.glob('./dataset/final/*.png')
+# images = glob.glob('./dataset/final/*.png')
 cars = []
 notcars = []
-for image in images:
-    if 'image' in image or 'extra' in image:
-        notcars.append(image)
-    else:
+# for image in images:
+#     if 'image' in image or 'extra' in image:
+#         notcars.append(image)
+#     else:
+#         cars.append(image)
+
+car_datasets = [
+    './dataset/vehicles/GTI_Far/*.png', 
+    './dataset/vehicles/GTI_Left/*.png', 
+    './dataset/vehicles/GTI_MiddleClose/*.png', 
+    './dataset/vehicles/GTI_Right/*.png', 
+    './dataset/vehicles/KITTI_extracted/*.png'
+    ]
+noncar_datasets = [
+    './dataset/non-vehicles/GTI/*.png', 
+    './dataset/non-vehicles/Extras/*.png'
+    ]
+
+for p in car_datasets:
+    images = glob.glob(p)
+    for image in images:
         cars.append(image)
+
+for p in noncar_datasets:
+    images = glob.glob(p)
+    for image in images:
+        notcars.append(image)
 
 # timage = mpimg.imread(cars[0])
 # plt.imshow(timage)
@@ -29,7 +51,7 @@ for image in images:
 # cell_per_block = 2
 # hog_channel = 0 # Can be 0, 1, 2, or "ALL"
 
-color_space='RGB'
+color_space='HLS'
 spatial_size=(32, 32)
 hist_bins=32
 hist_range=(0,1)
@@ -38,12 +60,12 @@ pix_per_cell=8
 cell_per_block=2
 hog_channel='ALL'
 spatial_feat=True
-hist_feat=False
+hist_feat=True
 hog_feat=True
 
 t=time.time()
-car_features = extract_features(imgs=cars, color_space=color_space, spatial_size=spatial_size,hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block, hog_channel=hog_channel,spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
-notcar_features = extract_features(imgs=notcars, color_space=color_space, spatial_size=spatial_size,hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block, hog_channel=hog_channel,spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
+car_features = multiple_img_features(imgs=cars, color_space=color_space, spatial_size=spatial_size,hist_bins=hist_bins, hist_range=hist_range, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block, hog_channel=hog_channel,spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
+notcar_features = multiple_img_features(imgs=notcars, color_space=color_space, spatial_size=spatial_size,hist_bins=hist_bins, hist_range=hist_range, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block, hog_channel=hog_channel,spatial_feat=spatial_feat, hist_feat=hist_feat, hog_feat=hog_feat)
 t2 = time.time()
 print(round(t2-t, 2), 'Seconds to extract HOG features...')
 # Create an array stack of feature vectors
@@ -92,6 +114,7 @@ try:
                 'color_space': color_space,
                 'spatial_size': spatial_size,
                 'hist_bins': hist_bins,
+                'hist_range': hist_range,
                 'orient': orient,
                 'pix_per_cell': pix_per_cell,
                 'cell_per_block': cell_per_block,
