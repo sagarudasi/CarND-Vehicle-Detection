@@ -68,6 +68,6 @@ def runpipeline(image):
 
 # Create a video output from project_video
 white_output = 'output_project_video.mp4'
-clip1 = VideoFileClip("test_video.mp4")
+clip1 = VideoFileClip("project_video.mp4")
 white_clip = clip1.fl_image(runpipeline)
 white_clip.write_videofile(white_output, audio=False)
