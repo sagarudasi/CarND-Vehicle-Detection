@@ -1,14 +1,8 @@
 from common import *
 import pickle
 
-# images = glob.glob('./dataset/final/*.png')
 cars = []
 notcars = []
-# for image in images:
-#     if 'image' in image or 'extra' in image:
-#         notcars.append(image)
-#     else:
-#         cars.append(image)
 
 car_datasets = [
     './dataset/vehicles/GTI_Far/*.png', 
@@ -32,29 +26,10 @@ for p in noncar_datasets:
     for image in images:
         notcars.append(image)
 
-# timage = mpimg.imread(cars[0])
-# plt.imshow(timage)
-# plt.show()
-# print(str(timage))
-# sys.exit(0)
-
-# Reduce the sample size because HOG features are slow to compute
-#The quiz evaluator times out after 13s of CPU time
-# sample_size = 100
-# cars = cars[0:sample_size]
-# notcars = notcars[0:sample_size]
-
-### TODO: Tweak these parameters and see how the results change.
-# colorspace = 'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
-# orient = 9
-# pix_per_cell = 8
-# cell_per_block = 2
-# hog_channel = 0 # Can be 0, 1, 2, or "ALL"
-
 color_space='HLS'
 spatial_size=(32, 32)
 hist_bins=32
-hist_range=(0,1)
+hist_range=(0,255)
 orient=9
 pix_per_cell=8
 cell_per_block=2
